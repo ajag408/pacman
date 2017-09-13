@@ -181,6 +181,7 @@
 
     var wives = 3;
 
+    //creates the game board
     function displayWorld(){
       var output = '';
       for(var i =0; i<world.length; i++){
@@ -243,6 +244,24 @@
       document.getElementById('wives').innerHTML = output3;
     }
 
+    function endGameCheck(){
+      if(lives <= 0){
+        document.getElementById('pacman').style.visibility = 'hidden';
+      }
+      if(wives <= 0){
+        document.getElementById('pacwoman').style.visibility = 'hidden';
+      }
+      if(lives <= 0 && wives <= 0){
+        displayLives();
+        displayWives();
+        console.log('game over');
+        return true;
+      } else {
+        console.log('still going');
+        return false;
+      }
+    }
+
     function randDirectionGen(){
       return Math.floor(Math.random()*4);
     }
@@ -272,17 +291,23 @@
       if(moved == true){
         if(pacman.y == ghost.y && pacman.x == ghost.x){
           lives--;
-          displayLives();
-          pacman.x = 1;
-          pacman.y = 1;
-          displayPacman();
+          endGame = endGameCheck()
+          if(endGame == false){
+            displayLives();
+            pacman.x = 1;
+            pacman.y = 1;
+            displayPacman();
+          }
         }
         if(pacwoman.y == ghost.y && pacwoman.x == ghost.x){
           wives--;
-          displayWives();
-          pacwoman.x = 18;
-          pacwoman.y = 10;
-          displayPacwoman();
+          endGame = endGameCheck()
+          if(endGame == false){
+            displayWives();
+            pacwoman.x = 18;
+            pacwoman.y = 10;
+            displayPacwoman();
+          }
         }
       }
     }
@@ -301,36 +326,36 @@
     setInterval(moveGhost, 400);
 
     document.onkeydown = function(e){
-      if(e.keyCode==37 && world[pacman.y][pacman.x-1] != 2){
+      if(e.keyCode==37 && world[pacman.y][pacman.x-1] != 2 && lives>0){
         document.getElementById('pacman').style.transform = 'rotate(180deg)';
         pacman.x--;
       }
-      else if(e.keyCode==39 && world[pacman.y][pacman.x+1] != 2){
+      else if(e.keyCode==39 && world[pacman.y][pacman.x+1] != 2 && lives>0){
         document.getElementById('pacman').style.transform = 'rotate(0deg)';
         pacman.x++;
       }
-      else if(e.keyCode==38 && world[pacman.y-1][pacman.x] != 2){
+      else if(e.keyCode==38 && world[pacman.y-1][pacman.x] != 2 && lives>0){
         document.getElementById('pacman').style.transform = 'rotate(270deg)';
         pacman.y--;
       }
-      else if(e.keyCode==40 && world[pacman.y+1][pacman.x] != 2){
+      else if(e.keyCode==40 && world[pacman.y+1][pacman.x] != 2 && lives>0){
         document.getElementById('pacman').style.transform = 'rotate(90deg)';
         pacman.y++;
       }
 
-      if(e.keyCode==83 && world[pacwoman.y][pacwoman.x-1] != 2){
+      if(e.keyCode==83 && world[pacwoman.y][pacwoman.x-1] != 2 && wives>0){
         document.getElementById('pacwoman').style.transform = 'rotate(180deg)';
         pacwoman.x--;
       }
-      else if(e.keyCode==70 && world[pacwoman.y][pacwoman.x+1] != 2){
+      else if(e.keyCode==70 && world[pacwoman.y][pacwoman.x+1] != 2 && wives>0){
         document.getElementById('pacwoman').style.transform = 'rotate(0deg)';
         pacwoman.x++;
       }
-      else if(e.keyCode==69 && world[pacwoman.y-1][pacwoman.x] != 2){
+      else if(e.keyCode==69 && world[pacwoman.y-1][pacwoman.x] != 2 && wives>0){
         document.getElementById('pacwoman').style.transform = 'rotate(270deg)';
         pacwoman.y--;
       }
-      else if(e.keyCode==67 && world[pacwoman.y+1][pacwoman.x] != 2){
+      else if(e.keyCode==67 && world[pacwoman.y+1][pacwoman.x] != 2 && wives>0){
         document.getElementById('pacwoman').style.transform = 'rotate(90deg)';
         pacwoman.y++;
       }
@@ -366,16 +391,22 @@
 
       if(pacman.y == ghost.y && pacman.x == ghost.x){
         lives--;
-        displayLives();
-        pacman.x = 1;
-        pacman.y = 1;
+        var endGame = endGameCheck();
+        if(endGame == false){
+          displayLives();
+          pacman.x = 1;
+          pacman.y = 1;
+        }
       }
 
       if(pacwoman.y == ghost.y && pacwoman.x == ghost.x){
         wives--;
-        displayWives();
-        pacwoman.x = 18;
-        pacwoman.y = 10;
+        var endGame = endGameCheck();
+        if(endGame == false){
+          displayWives();
+          pacwoman.x = 18;
+          pacwoman.y = 10;
+        }
       }
 
 
